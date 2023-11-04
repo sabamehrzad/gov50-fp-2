@@ -7,7 +7,36 @@ output:
     self_contained: false
 ---
 
+```{r}
+library(tidyverse)
+library(broom)
+library(qss)
+library(gapminder)
+library(ggplot2)
+```
 
 
-## Project thoughts
-Saba Mehrzad!!!
+```{r}
+civil_war <- read_csv("civilwar.csv")
+civil_war |>
+  filter(country %in% c("IRAN", "ISRAEL", "ARMENIA", "AZERBAIJAN", "BAHRAIN", "GAZA", "GEORGIA", "IRAQ", "JORDAN", "KUWAIT", "LEBANON", "OMAN", "QATAR", "SAUDI 
+                        ARABIA", "SYRIA", "TURKEY", "UNITED ARAB EMIRATES", "WEST BANK", "YEMEN"))
+
+```
+
+```{r}
+me_civil <- civil_war |>
+  group_by(year) |>
+  summarize(
+    avg_polity = mean(polity2)
+  )
+  
+me_civil_plot <- me_civil |>
+ggplot(mapping = aes(x = year, y = avg_polity)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(x = "Year",
+       y = "Average Polity Score",
+       title = "Average Polity Score Per Year in the Middle East")
+me_civil_plot
+```
